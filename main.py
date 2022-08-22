@@ -52,7 +52,7 @@ def get_random_color():
 def get_weekdays():
     week_list = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
     week_index = today.isoweekday()  # 获取指定时间的星期
-    riqi = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M")
+    riqi = datetime.strftime(datetime.now(), "%Y-%m-%d")
     week = week_list[week_index - 1]
     return riqi + " " + week
 
