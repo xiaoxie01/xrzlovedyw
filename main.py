@@ -22,7 +22,7 @@ def get_weather():
   url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
   res = requests.get(url).json()
   weather = res['data']['list'][0]
-  return weather['weather'], math.floor(weather['temp'])
+  return weather['weather'], math.floor(weather['temp']), math.floor(weather['high']), math.floor(weather['low'])
 
 def get_count():
   delta = today - datetime.strptime(start_date, "%Y-%m-%d")
@@ -34,21 +34,43 @@ def get_birthday():
     next = next.replace(year=next.year + 1)
   return (next - today).days
 
+
 def get_words():
   words = requests.get("https://api.shadiao.pro/chp")
   if words.status_code != 200:
     return get_words()
   return words.json()['data']['text']
 
+
 def get_random_color():
   return "#%06x" % random.randint(0, 0xFFFFFF)
+
+
+def get_weekdays():
+  week_list = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
+  week_index = today.isoweekday()  # 获取指定时间的星期
+  week = week_list[week_index - 1]
+  return week
 
 
 client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
-wea, temperature = get_weather()
-data = {"weather":{"value":wea},"temperature":{"value":temperature},"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
-res = wm.send_template(user_id, template_id, data)
-print(data)
+riqi = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M")
+wea, temperature, high, low = get_weather()
+data = {"weather": {"value": wea}, "temperature": {"value": temperature}, "love_days": {"value": get_count()},
+        "birthday_left": {"value": get_birthday()}, "words": {"value": get_words(), "color": get_random_color()}}
+
+data1 = {"riqi": {"value": riqi + "  " + get_weekdays()}, "city": {"value": city}, "tianqi": {"value": wea},
+         "dqwd": {"value", temperature}, "high": {"value", high}, "low": {"value", low},
+         "love_days": {"value": get_count()}, "birthday_left": {"value": get_birthday()},
+         "words": {"value": get_words(), "color": get_random_color()}}
+
+# 当前时间：riqi
+# city 市今天天气：wea
+# 当前温度：temperature
+# 最高温度：high
+# 最低温度：low
+
+res = wm.send_template(user_id, template_id, data1)
 print(res)
