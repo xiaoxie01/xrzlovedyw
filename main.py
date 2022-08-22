@@ -22,7 +22,8 @@ def get_weather():
   url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
   res = requests.get(url).json()
   weather = res['data']['list'][0]
-  return weather['weather'], math.floor(weather['temp']), math.floor(weather['high']), math.floor(weather['low'])
+  return weather['weather'], math.floor(weather['temp']), math.floor(weather['high']), math.floor(weather['low']), \
+         weather['city']
 
 def get_count():
   delta = today - datetime.strptime(start_date, "%Y-%m-%d")
@@ -57,11 +58,11 @@ client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
 riqi = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M")
-wea, temperature, high, low = get_weather()
+wea, temperature, high, low, chengshi = get_weather()
 data1 = {"weather": {"value": wea}, "temperature": {"value": temperature}, "love_days": {"value": get_count()},
          "birthday_left": {"value": get_birthday()}, "words": {"value": get_words(), "color": get_random_color()}}
 
-data = {"riqi": {"value": riqi + "  " + get_weekdays()}, "city": {"value": city}, "tianqi": {"value": wea},
+data = {"riqi": {"value": riqi + "  " + get_weekdays()}, "city": {"value": chengshi}, "tianqi": {"value": wea},
         "dqwd": {"value", temperature}, "high": {"value", high}, "low": {"value", low},
         "love_days": {"value": get_count()}, "birthday_left": {"value": get_birthday()},
         "words": {"value": get_words(), "color": get_random_color()}}
