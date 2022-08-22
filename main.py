@@ -66,6 +66,8 @@ data1 = {"riqi": {"value": riqi + "  " + get_weekdays()}, "city": {"value": city
          "love_days": {"value": get_count()}, "birthday_left": {"value": get_birthday()},
          "words": {"value": get_words(), "color": get_random_color()}}
 
+print(data1)
+
 # 当前时间：riqi
 # city 市今天天气：wea
 # 当前温度：temperature
