@@ -72,6 +72,6 @@ data1 = {"riqi": {"value": riqi + "  " + get_weekdays()}, "city": {"value": city
 # 最高温度：high
 # 最低温度：low
 
-res = wm.send_template(user_id, template_id, data)
+res = wm.send_template(user_id, template_id, data1.json())
 print(data1)
 print(res)
